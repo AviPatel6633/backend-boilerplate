@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const routes = require('./src/routes');
 
 const app = express();
 
@@ -19,12 +20,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health check
-app.get('/', (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    message: 'API is running 🚀'
-  });
-});
+app.use('/api/v1', routes);
+// app.get('/', (req, res) => {
+//   res.status(200).json({
+//     status: 'success',
+//     message: 'API is running 🚀'
+//   });
+// });
 
 // 404 handler
 app.use((req, res) => {
