@@ -13,11 +13,14 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
   credentials: true, // Allow credentials (cookies) to be sent
 };
+
 app.use(cors(corsOptions));
 app.use(helmet());
 app.use(morgan('dev'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.set('query parser', 'extended');
 
 // Health check
 app.use('/api/v1', routes);

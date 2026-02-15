@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const menuRoutes = require('./../modules/menu/menu.routes')
+const tourRoutes = require('./../modules/tour/tour.route')
 // Import module routes
 // const userRoutes = require('../modules/user/user.routes');
 
@@ -8,7 +9,7 @@ const menuRoutes = require('./../modules/menu/menu.routes')
 
 // router.use('/', menuRoutes);
 router.use('/menu', menuRoutes);
-
+router.use('/tour', tourRoutes);
 
 // router.use("/", (req, res) => {
 //   res.status(200).json({
