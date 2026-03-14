@@ -1,3 +1,4 @@
+const APIFeatures = require("../../utils/apiFeatures");
 const TourItem = require("./tour.model");
 
 //Not Working solve Later
@@ -15,6 +16,28 @@ const aliasTopTours = (req, res, next) => {
   console.log("FULL REQ QUERY:", req.query);
   next();
 };
+
+const getTours2 = async (req, res) => {
+  try {
+    const features = new APIFeatures(TourItem.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+      
+    const tourItems = await features.query; 
+    res.status(200).json({
+      status: "success",
+      length: tourItems.length,
+      tourItems,
+    }); // Send the retrieved items as a response
+  } catch (err) {     
+    console.error("Error fetching menu items:", err);
+    res
+      .status(500)
+      .json({ status: "success", message: "Internal Server Error" });
+  } 
+};
 // GET API to retrieve all menu items
 const getTours = async (req, res) => {
   try {
@@ -24,7 +47,7 @@ const getTours = async (req, res) => {
     let queryObj = { ...req.query };
 
     // 1️⃣ Remove special fields
-    const excludedFields = ["page", "sort", "limit", "field"];
+    const excludedFields = ["page", "sort", "limit", "fields"];
     excludedFields.forEach((el) => delete queryObj[el]);
 
     // 2️⃣ Convert query object to string
@@ -56,8 +79,8 @@ const getTours = async (req, res) => {
     // +========SORT DATA BY API =================
 
     // ===========Field Limiting ++++++++++++++++++++
-    if (req.query.field) {
-      const fields = req.query.field.split(",").join(" ");
+    if (req.query.fields) {
+      const fields = req.query.fields.split(",").join(" ");
       console.log(fields);
       query = query.select(fields);
     } else {
@@ -165,6 +188,7 @@ const createTour = async (req, res) => {
 module.exports = {
   createTour,
   getTours,
+  getTours2,
   getToursById,
   getToursByParams,
   aliasTopTours,
